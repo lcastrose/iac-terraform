@@ -1,31 +1,64 @@
+terraform {
+  required_version = ">= 0.12.0"
+}
 
-# Please update with the respective environment values and commit
-# to master branch under the .github folder before performing scans
+provider "aws" {
+  region = "us-east-1"
+}
 
-# Define the failure criteria for creating checks. If the criteria 
-# matches a check will be created. The template for the checks can 
-# becustomized in the "/.github/prisma-template-for-scan-results" 
-# file.
-failure_criteria_for_creating_checks:
-  high: 1
-  medium: 1
-  low: 2
-  operator: or
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "172.16.0.0/16"
+  tags = {
+    Name = "tf-0.12-for-example"
+  }
+}
 
-# Define the failure criteria for creating issues. If the criteria 
-# matches an issue will be created. The template for issues can be 
-# customized in the "/.github/prisma-template-for-scan-results" 
-# file.
-failure_criteria_for_creating_issues:
-  high: 1
-  medium: 1
-  low: 1
-  operator: or
+resource "aws_subnet" "my_subnet" {
+  vpc_id = aws_vpc.my_vpc.id
+  cidr_block = "172.16.10.0/24"
+  availability_zone = "us-east-1a"
+  tags = {
+    Name = "tf-0.12-for-example"
+  }
+}
 
-# Define github asset name
-github_asset_name: "Github Asset Dev"
+resource "aws_instance" "ubuntu" {
+  count = 3
+  ami           = "ami-2e1ef954"
+  instance_type = "t2.micro"
+  associate_public_ip_address = ( count.index == 1 ? true : false)
+  subnet_id = aws_subnet.my_subnet.id
+  tags = {
+    Name  = format("terraform-0.12-for-demo-%d", count.index)
+  }
+}
 
-# Define tags
-tags:
-- phase:testing
-- env:QA
+# This uses the old splat expression
+output "private_addresses_old" {
+  value = aws_instance.ubuntu.*.private_dns
+}
+
+# This uses the new full splat operator (*)
+# But this does not work in 0.12 alpha-1 or alpha-2
+output "private_addresses_full_splat" {
+  value = [ aws_instance.ubuntu[*].private_dns ]
+}
+
+# This uses the new for expression
+output "private_addresses_new" {
+  value = [
+    for instance in aws_instance.ubuntu:
+    instance.private_dns
+  ]
+}
+
+# This uses the new conditional operator
+# that can work with lists
+# It should work with lists in [x, y, z] form, but does not yet do that
+output "ips" {
+  value = [
+    for instance in aws_instance.ubuntu:
+    (instance.public_ip != "" ? list(instance.private_ip, instance.public_ip) : list(instance.private_ip))
+  ]
+}
+
