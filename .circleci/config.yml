@@ -1,0 +1,14 @@
+orbs:
+  pcs: prisma_cloud/devops_security@3.0.0
+version: 2.1
+workflows:
+  scan:
+    jobs:
+      - pcs/scan_iac:
+          prisma_cloud_access_key: 9da38f4a-67ed-4d4d-8ce0-7cf929333f51
+          prisma_cloud_api_url: https://api.prismacloud.io
+          prisma_cloud_asset_name: lcastro-circle-ci
+          prisma_cloud_failure_criteria: 'High:1, Medium:1, Low:1, Operator:OR'
+          prisma_cloud_repo_dir: ./iac-terraform
+          prisma_cloud_secret_key: 8D+WlO9BEePpCVJrFhnHBi4pVyI=
+          prisma_cloud_tags: 'env:development, team:DevOps'
