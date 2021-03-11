@@ -13,21 +13,15 @@ workflows:
           prisma_cloud_secret_key: prisma_cloud_secret_key
           prisma_cloud_tags: 'env:development, team:DevOps'
           
-jobs:
-  docker_safe_build:
-    executor: pcs/compute
-    steps:
-      - checkout
-      - run: docker pull nginx
-      - pcs/scan_image:
-          prisma_cloud_compute_password: prisma_cloud_compute_password
-          prisma_cloud_compute_url: https://us-east1.cloud.twistlock.com:8083
-          prisma_cloud_compute_username: lcastro
-          prisma_cloud_scan_image: nginx
-#orbs:
-  pcs: prisma_cloud/devops_security@3.0.0
-version: 2.1
-workflows:
-  scan:
-    jobs:
-      - docker_safe_build
+
+      - docker_safe_build:
+          executor: pcs/compute
+          steps:
+            - checkout
+            - run: docker pull nginx
+            - pcs/scan_image:
+                prisma_cloud_compute_password: prisma_cloud_compute_password
+                prisma_cloud_compute_url: https://us-east1.cloud.twistlock.com:8083
+                prisma_cloud_compute_username: lcastro
+                prisma_cloud_scan_image: nginx
+
