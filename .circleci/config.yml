@@ -25,9 +25,9 @@ jobs:
           prisma_cloud_compute_username: lcastro
           prisma_cloud_scan_image: nginx
 #orbs:
-#  pcs: prisma_cloud/devops_security@3.0.0
-#version: 2.1
-#workflows:
-#  scan:
-#    jobs:
-#      - docker_safe_build
+  pcs: prisma_cloud/devops_security@3.0.0
+version: 2.1
+workflows:
+  scan:
+    jobs:
+      - docker_safe_build
