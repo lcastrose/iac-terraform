@@ -14,7 +14,7 @@ workflows:
           prisma_cloud_tags: 'env:development, team:DevOps'
           
   
-    jobs:
+    
       - docker_safe_build:
           executor: pcs/compute
           steps:
