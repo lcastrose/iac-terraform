@@ -12,4 +12,3 @@ workflows:
           prisma_cloud_repo_dir: ./test
           prisma_cloud_secret_key: prisma_cloud_secret_key
           prisma_cloud_tags: 'env:development, team:DevOps'
-
