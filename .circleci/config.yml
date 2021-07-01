@@ -8,7 +8,7 @@ workflows:
           prisma_cloud_access_key: 9da38f4a-67ed-4d4d-8ce0-7cf929333f51
           prisma_cloud_api_url: https://api.prismacloud.io
           prisma_cloud_asset_name: lcastro-circle-ci
-          prisma_cloud_failure_criteria: 'High:100, Medium:100, Low:300, Operator:OR'
+          prisma_cloud_failure_criteria: 'High:1, Medium:1, Low:3, Operator:OR'
           prisma_cloud_repo_dir: ./test
           prisma_cloud_secret_key: prisma_cloud_secret_key
           prisma_cloud_tags: 'env:development, team:DevOps'
