@@ -4,4 +4,5 @@ resource "aws_s3_bucket" "foo" {
     versioning { enabled = false }
     acl = "public-read-write"
      
+  enabled = true
 }
